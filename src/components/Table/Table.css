@@ -1,0 +1,32 @@
+/* Edit button */
+.edit-btn {
+    background-color: #2196F3;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #0b7dda;
+}
+
+.edit-btn:disabled {
+    background-color: #0b7dda;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+
+/* Delete button */
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #da190b;
+}
+
+.delete-btn:disabled {
+    background-color: #da190b;
+    opacity: 0.5;
+    pointer-events: none;
+}

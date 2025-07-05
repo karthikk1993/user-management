@@ -7,12 +7,21 @@ export interface User {
   isEdit: boolean;
 }
 
+export interface State {
+  items: User[];
+}
+
+export type Action =
+  | { type: 'ADD_ITEM'; payload: User }
+  | { type: 'DELETE_ITEM'; payload: string }
+  | { type: 'UPDATE_ITEM'; payload: User }
+  | { type: 'SET_USER_LIST'; payload: User[]}
+  | { type: 'RESET'}
+
+
 export interface UserContextType {
-  userListDetails: Array<User>;
-  selectedUser: User;
-  addToUserListDetails: (listDetails: User[])=> void;
-  updateSelectedUser: (selectedUserDetails: User)=> void;
-  resetUserForm: () => void;
+  state: State;
+  dispatch: React.Dispatch<Action>;
 };
 
 export interface TableProps<T> {

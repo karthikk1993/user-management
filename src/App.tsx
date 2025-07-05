@@ -20,7 +20,7 @@ const App: React.FC<AppProps> = ({ appName = userManagementConstants.appName }) 
             <Routes>
               <Route path="/" element={<UserManagementWrapper />} />
               <Route path="/userList" element={<UserManagementWrapper />} />
-              <Route path="/userForm" element={<UserForm />} />
+              <Route path="/userForm/:userId" element={<UserForm />} />
             </Routes>
           </header>
         </div>

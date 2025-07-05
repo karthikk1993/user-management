@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { User, UserFormState } from '../../types/UserMgmtTypes';
 import { UserContext } from '../../contexts/UserContext.tsx';
 import userManagementConstants from '../../utils/usermanagement-constants.ts';
@@ -16,11 +16,15 @@ const UserForm = () => {
     const [errors, setErrors] = useState<UserFormState>(initialErrorData);
     const userContext = useContext(UserContext)
     const navigate = useNavigate();
+    const { userId } = useParams();
+    const { dispatch, state } = userContext
 
     useEffect(() => {
-        const { username, email, role } = userContext?.selectedUser;
-        const seletedUserDetails: UserFormState = { username, email, role };
-        setForm(seletedUserDetails)
+        if (userId && userId !== '0') {
+            const { username, email, role } = state.items.find(item => item.id === userId)
+            const seletedUserDetails: UserFormState = { username, email, role };
+            setForm(seletedUserDetails)
+        }
     }, [])
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -29,7 +33,8 @@ const UserForm = () => {
         validateUserForm(newErrors);
         setErrors(newErrors);
         if (Object.keys(newErrors).length > 0) return;
-        addNewUserDetails();
+        userId && userId !== '0' ? editUserDetails() : addNewUserDetails();
+        navigate('/userList')
     };
 
     //validations during submit
@@ -43,11 +48,15 @@ const UserForm = () => {
     }
 
     const addNewUserDetails = () => {
-        const availableIdList = userContext?.userListDetails.map(user => Number(user.id));
+        const availableIdList = state.items.map(user => Number(user.id));
         const setNewUserId = Math.max(...availableIdList) + 1;
         const newUserDetails: User = { id: setNewUserId.toString(), email: form.email, username: form.username, role: form.role, isEdit: form.role === 'user' }
-        userContext?.addToUserListDetails([...userContext?.userListDetails, newUserDetails])
-        navigate('/userList')
+        dispatch({ type: 'ADD_ITEM', payload: newUserDetails });
+    }
+
+    const editUserDetails = () => {
+        const newUserDetails: User = { id: userId || '', email: form.email, username: form.username, role: form.role, isEdit: form.role === 'user' }
+        dispatch({ type: 'UPDATE_ITEM', payload: newUserDetails });
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {

@@ -1,30 +1,50 @@
-import React, { createContext, ReactNode, useState } from 'react';
-import { User, UserContextType } from '../types/UserMgmtTypes';
+import React, { createContext, ReactNode, useReducer, useState } from 'react';
+import { Action, State, User, UserContextType } from '../types/UserMgmtTypes';
+import { initialUserList } from '../assets/mock/userList'
 
 // create user context for maintaining user list and selected user data
 
-export const UserContext = createContext<UserContextType | undefined>(undefined);
+const initialState = {
+    items: initialUserList
+};
+
+export const UserContext = createContext<{ state: State; dispatch: React.Dispatch<Action>; }>({
+    state: initialState,
+    dispatch: () => null,
+});
+
+
+const reducer = (state: State, action: Action): State => {
+    switch (action.type) {
+        case 'SET_USER_LIST':
+            return { items: action.payload};
+        case 'ADD_ITEM':
+            return { ...state, items: [...state.items, action.payload] };
+        case 'DELETE_ITEM':
+            return {
+                ...state,
+                items: state.items.filter(item => item.id !== action.payload),
+            };
+        case 'UPDATE_ITEM':
+            return {
+                ...state,
+                items: state.items.map(item =>
+                    item.id === action.payload.id
+                        ? { ...item, ...action.payload }
+                        : item
+                ),
+            };
+        default:
+            return state;
+    }
+};
 
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const initialUserListData: User[] = [];
-    const initialSelectedUserData: User = { id: '', username: '', email: '', role: '', isEdit: false }
-    const [userListDetails, setUserListDetails] = useState<User[]>(initialUserListData);
-    const [selectedUser, setSelectedUser] = useState<User>(initialSelectedUserData);
 
-    //providing the functions to necessary components to update the user list details and selected user details
-    const addToUserListDetails = (listDetails: User[]) => {
-        setUserListDetails(listDetails);
-    };
-    const updateSelectedUser = (selectedUserDetails: User) => {
-        setSelectedUser(selectedUserDetails);
-    };
-    const resetUserForm = ()=>{
-        setSelectedUser(initialSelectedUserData);
-    }
-    const value = { userListDetails, selectedUser, addToUserListDetails, updateSelectedUser, resetUserForm };
+    const [state, dispatch] = useReducer(reducer, initialState);
 
     return (
-        <UserContext.Provider value={value}>
+        <UserContext.Provider value={{ state, dispatch }}>
             {children}
         </UserContext.Provider>
     );

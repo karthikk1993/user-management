@@ -16,7 +16,6 @@ export type Action =
   | { type: 'DELETE_ITEM'; payload: string }
   | { type: 'UPDATE_ITEM'; payload: User }
   | { type: 'SET_USER_LIST'; payload: User[]}
-  | { type: 'RESET'}
 
 
 export interface UserContextType {

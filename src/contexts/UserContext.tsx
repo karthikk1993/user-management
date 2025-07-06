@@ -1,5 +1,5 @@
-import React, { createContext, ReactNode, useReducer, useState } from 'react';
-import { Action, State, User, UserContextType } from '../types/UserMgmtTypes';
+import React, { createContext, ReactNode, useReducer } from 'react';
+import { UserContextType, Action, State } from '../types/UserMgmtTypes';
 import { initialUserList } from '../assets/mock/userList'
 
 // create user context for maintaining user list and selected user data
@@ -8,7 +8,7 @@ const initialState = {
     items: initialUserList
 };
 
-export const UserContext = createContext<{ state: State; dispatch: React.Dispatch<Action>; }>({
+export const UserContext = createContext<UserContextType>({
     state: initialState,
     dispatch: () => null,
 });
@@ -17,13 +17,16 @@ export const UserContext = createContext<{ state: State; dispatch: React.Dispatc
 const reducer = (state: State, action: Action): State => {
     switch (action.type) {
         case 'SET_USER_LIST':
-            return { items: action.payload};
+            return { items: action.payload };
         case 'ADD_ITEM':
             return { ...state, items: [...state.items, action.payload] };
         case 'DELETE_ITEM':
+            const deleteIndex = state.items.findIndex(item => item.id === action.payload);
+            const list = [...state.items];
+            list.splice(deleteIndex, 1)
             return {
                 ...state,
-                items: state.items.filter(item => item.id !== action.payload),
+                items: list
             };
         case 'UPDATE_ITEM':
             return {

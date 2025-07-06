@@ -16,7 +16,7 @@ const UserForm = () => {
     const [errors, setErrors] = useState<UserFormState>(initialErrorData);
     const userContext = useContext(UserContext)
     const navigate = useNavigate();
-    const { userId } = useParams();
+    const { userId } = useParams(); // userId is used by the form to differentiate between add and edit
     const { dispatch, state } = userContext
 
     useEffect(() => {
@@ -27,6 +27,7 @@ const UserForm = () => {
         }
     }, [])
 
+    //triggered when form is submitted
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         let newErrors: UserFormState = {};
@@ -47,6 +48,7 @@ const UserForm = () => {
         if (!form.role) newErrors.role = userFormValidationMessages.role.required;
     }
 
+    //adds a new entry to the user list
     const addNewUserDetails = () => {
         const availableIdList = state.items.map(user => Number(user.id));
         const setNewUserId = Math.max(...availableIdList) + 1;
@@ -54,6 +56,7 @@ const UserForm = () => {
         dispatch({ type: 'ADD_ITEM', payload: newUserDetails });
     }
 
+    //updates the existing entry in the user list
     const editUserDetails = () => {
         const newUserDetails: User = { id: userId || '', email: form.email, username: form.username, role: form.role, isEdit: form.role === 'user' }
         dispatch({ type: 'UPDATE_ITEM', payload: newUserDetails });

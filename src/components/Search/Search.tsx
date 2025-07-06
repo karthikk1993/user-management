@@ -1,5 +1,6 @@
 import React from 'react';
 
+//reuseable search component with debounce feature to use across application
 const Search = ({ inputRef, handleSearchChange }) => {
     return (
         <input

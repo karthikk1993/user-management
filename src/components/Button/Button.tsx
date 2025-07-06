@@ -2,6 +2,7 @@ import React from 'react';
 import { ButtonProps } from '../../types/UserMgmtTypes';
 import './Button.css'
 
+// reuseable button component to use across the application
 const Button = ({ 
   children, 
   onClick, 

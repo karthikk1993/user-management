@@ -3,8 +3,9 @@ import { TableProps } from '../../types/UserMgmtTypes.ts';
 import './Table.css'
 import Button from '../Button/Button.tsx';
 
+//reuseable table component
 const Table = <T,>({ rows, columns, isUpdate = false, onUserEdit, onUserDelete }: TableProps<T>) => {
-
+    
     const EditButton = ({ row }) => {
         return (
             <Button className='edit-btn' disabled={!row.isEdit} onClick={()=>onUserEdit(row)}>Edit</Button>

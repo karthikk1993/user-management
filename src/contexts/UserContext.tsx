@@ -2,8 +2,6 @@ import React, { createContext, ReactNode, useReducer } from 'react';
 import { UserContextType, Action, State } from '../types/UserMgmtTypes';
 import { initialUserList } from '../assets/mock/userList'
 
-// create user context for maintaining user list and selected user data
-
 const initialState = {
     items: initialUserList
 };
@@ -13,7 +11,7 @@ export const UserContext = createContext<UserContextType>({
     dispatch: () => null,
 });
 
-
+//context driven state to maintain the userlist and also perform the view,add,update and delete operations in the list
 const reducer = (state: State, action: Action): State => {
     switch (action.type) {
         case 'SET_USER_LIST':

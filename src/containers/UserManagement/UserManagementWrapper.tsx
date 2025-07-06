@@ -29,6 +29,7 @@ const UserManagementWrapper = () => {
         setUserListItems(state.items);
     }, [])
 
+    //search callback function with debouce delay of 1s
     const handleSearch = (term) => {
         setIsDelete(false);
         if (!term) {
@@ -48,16 +49,22 @@ const UserManagementWrapper = () => {
     const handleSearchChange = (e) => {
         debouncedSearch(e.target.value);
     };
+
+    //called when add button is clicked
     const addUserDetails = () => {
         const list = isDelete ? state.items : userListItems;
         dispatch({ type: 'SET_USER_LIST', payload: list })
         navigate('/userForm/0')
     }
+    
+    //called when edit button from row is clicked
     const onUserEdit = row => {
         const list = isDelete ? state.items : userListItems;
         dispatch({ type: 'SET_USER_LIST', payload: list })
         navigate(`/userForm/${row.id}`)
     }
+
+    //called when delete button from row is clicked
     const onUserDelete = row => {
         setIsDelete(true);
         dispatch({ type: 'DELETE_ITEM', payload: row.id })
